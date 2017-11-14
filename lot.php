@@ -8,95 +8,30 @@ $bets = [
     ['name' => 'Семён', 'price' => 10000, 'ts' => strtotime('last week')]
 ];
 
-function hoursDeclension( int $hours){
-	
-	
-	if( $hours == 11){
-		return "часов";
+function getNumEnding( $number, $endingArray){
+	$result = '';
+	$number = $number % 100;
+	if( $number>=11 && $number<=19 ){
+		$result = $endingArray[2];
+	}else{
+		$x = $number%10;
+		switch($x){
+			case(1): $result = $endingArray[0]; break;
+			case(2): 
+			case(3):
+			case(4): $result = $endingArray[1]; break;
+			default: $result = $endingArray[2];
+		}
 	}
-	if( ($hours % 10) == 1){
-		return "час";
-	}
-	if( ($hours>=5) && ($hours<=20) ){
-		return "часов";
-	}
-	if( ($hours>1) && ($hours<5) ){
-		return "часа";
-	}
-	if( ($hours % 10) == 0){
-		return "часов";
-	}
-	if( ($hours % 10) == 5){
-		return "часов";
-	}
-	if( ($hours % 10) == 6){
-		return "часов";
-	}
-	if( ($hours % 10) == 7){
-		return "часов";
-	}
-	if( ($hours % 10) == 8){
-		return "часов";
-	}
-	if( ($hours % 10) == 9){
-		return "часов";
-	}
-	if( ($hours % 10) == 2){
-		return "часов";
-	}
-	if( ($hours % 10) == 3){
-		return "часов";
-	}
-	if( ($hours % 10) == 4){
-		return "часов";
-	}
+	return $result;
 }
 
-function minutesDeclension( int $minutes){
-	if( $minutes == 11){
-		return "минут";
-	}
-	if( ($minutes % 10) == 1){
-		return "минута";
-	}
-	if( ($minutes>=5) && ($minutes<=20) ){
-		return "минут";
-	}
-	if( ($minutes>1) && ($minutes<5) ){
-		return "минуты";
-	}
-	if( ($minutes % 10) == 0){
-		return "минут";
-	}
-	if( ($minutes % 10) == 5){
-		return "минут";
-	}
-	if( ($minutes % 10) == 6){
-		return "минут";
-	}
-	if( ($minutes % 10) == 7){
-		return "минут";
-	}
-	if( ($minutes % 10) == 8){
-		return "минут";
-	}
-	if( ($minutes % 10) == 9){
-		return "минут";
-	}
-	if( ($minutes % 10) == 2){
-		return "минуты";
-	}
-	if( ($minutes % 10) == 3){
-		return "минуты";
-	}
-	if( ($minutes % 10) == 4){
-		return "минуты";
-	}
-}
 
 
 function howLongTime( int $lastTime ){
 	$now=strtotime('now');
+	$hoursName=["час", "часа", "часов"];
+	$minutesName=["минута", "минуты", "минут"];
 	$diff = $now-$lastTime;
 	$hours=$diff/3600;
 	$minutes=($diff/60)%60;
@@ -105,11 +40,11 @@ function howLongTime( int $lastTime ){
 		return date("d.m.y в H.i", $lastTime);
 	}
 	if($hours<1){
-		$result = " $minutes ".minutesDeclension($minutes)." назад";
+		$result = sprintf( " %d %s назад", $minutes, getNumEnding($minutes, $minutesName) );
 		return $result;
 	}
 	
-	$result = " $hours " . hoursDeclension($hours) . " назад";
+	$result = sprintf( " %d %s назад", $hours, getNumEnding($hours, $hoursName) );
 	
 	return $result;
 }
