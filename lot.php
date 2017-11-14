@@ -7,6 +7,48 @@ $bets = [
     ['name' => 'Евгений', 'price' => 10500, 'ts' => strtotime('-' . rand(25, 50) .' hour')],
     ['name' => 'Семён', 'price' => 10000, 'ts' => strtotime('last week')]
 ];
+
+function getNumEnding( $number, $endingArray){
+	$result = '';
+	$number = $number % 100;
+	if( $number>=11 && $number<=19 ){
+		$result = $endingArray[2];
+	}else{
+		$x = $number%10;
+		switch($x){
+			case(1): $result = $endingArray[0]; break;
+			case(2): 
+			case(3):
+			case(4): $result = $endingArray[1]; break;
+			default: $result = $endingArray[2];
+		}
+	}
+	return $result;
+}
+
+
+
+function howLongTime( int $lastTime ){
+	$now=strtotime('now');
+	$hoursName=["час", "часа", "часов"];
+	$minutesName=["минута", "минуты", "минут"];
+	$diff = $now-$lastTime;
+	$hours=$diff/3600;
+	$minutes=($diff/60)%60;
+	$seconds=$diff-($hours*3600 + $minutes*60);
+	if($hours>24){
+		return date("d.m.y в H.i", $lastTime);
+	}
+	if($hours<1){
+		$result = sprintf( " %d %s назад", $minutes, getNumEnding($minutes, $minutesName) );
+		return $result;
+	}
+	
+	$result = sprintf( " %d %s назад", $hours, getNumEnding($hours, $hoursName) );
+	
+	return $result;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -111,11 +153,13 @@ $bets = [
                     <h3>История ставок (<span>4</span>)</h3>
                     <!-- заполните эту таблицу данными из массива $bets-->
                     <table class="history__list">
-                        <tr class="history__item">
-                            <td class="history__name"><!-- имя автора--></td>
-                            <td class="history__price"><!-- цена--> р</td>
-                            <td class="history__time"><!-- дата в человеческом формате--></td>
-                        </tr>
+						<?php foreach( $bets as $bet ): ?>
+							<tr class="history__item">
+								<td class="history__name"><?=$bet['name']; ?></td>
+								<td class="history__price"><?=$bet['price']; ?></td>
+								<td class="history__time"><?=howLongTime($bet['ts']); ?> </td>
+							</tr>
+						<?php endforeach; ?>	
                     </table>
                 </div>
             </div>
