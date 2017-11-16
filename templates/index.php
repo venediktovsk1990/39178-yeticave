@@ -1,6 +1,6 @@
 <section class="promo">
-        <h2 class="promo__title">Нужен стафф для катки?</h2>
-        <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
+        <h2 class="promo__title">РќСѓР¶РµРЅ СЃС‚Р°С„С„ РґР»СЏ РєР°С‚РєРё?</h2>
+        <p class="promo__text">РќР° РЅР°С€РµРј РёРЅС‚РµСЂРЅРµС‚-Р°СѓРєС†РёРѕРЅРµ С‚С‹ РЅР°Р№РґС‘С€СЊ СЃР°РјРѕРµ СЌРєСЃРєР»СЋР·РёРІРЅРѕРµ СЃРЅРѕСѓР±РѕСЂРґРёС‡РµСЃРєРѕРµ Рё РіРѕСЂРЅРѕР»С‹Р¶РЅРѕРµ СЃРЅР°СЂСЏР¶РµРЅРёРµ.</p>
         <ul class="promo__list">
 			<?php foreach( $categories as $valueCat):  ?>
 				<li class="promo__item promo__item--boards">
@@ -11,21 +11,21 @@
     </section>
     <section class="lots">
         <div class="lots__header">
-            <h2>Открытые лоты</h2>
+            <h2>РћС‚РєСЂС‹С‚С‹Рµ Р»РѕС‚С‹</h2>
         </div>
         <ul class="lots__list">
 			<?php foreach( $lots as $lot ):  ?>
 				<li class="lots__item lot">
 					<div class="lot__image">
-						<img src=<?=$lot['img'] ?> width="350" height="260" alt="Сноуборд">
+						<img src=<?=$lot['img'] ?> width="350" height="260" alt="РЎРЅРѕСѓР±РѕСЂРґ">
 					</div>
 					<div class="lot__info">
 						<span class="lot__category"><?=$lot['category']; ?></span>
 						<h3 class="lot__title"><a class="text-link" href="lot.html"> <?=$lot['name']; ?> </a></h3>
 						<div class="lot__state">
 							<div class="lot__rate">
-								<span class="lot__amount">Стартовая цена</span>
-								<span class="lot__cost"> <?=$lot['cost']; ?> <b class="rub">р</b></span>
+								<span class="lot__amount">РЎС‚Р°СЂС‚РѕРІР°СЏ С†РµРЅР°</span>
+								<span class="lot__cost"> <?=$lot['cost']; ?> <b class="rub">СЂ</b></span>
 							</div>
 							<div class="lot__timer timer">
 								<?=$lot_time_remaining;?>

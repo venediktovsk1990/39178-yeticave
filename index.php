@@ -17,7 +17,7 @@ $tomorrow = strtotime('tomorrow midnight');
 $now = strtotime('now');
 
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
-$lot_time_remaining = date("H:i", $tomorrow - $now);
+$lot_time_remaining=date("H:i", $tomorrow - $now);
 
  $categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
  $lots = [
@@ -32,6 +32,10 @@ $lot_time_remaining = date("H:i", $tomorrow - $now);
  
  require_once('./functions.php');
  
- $page_content=includeTemplate('/template/index.php', ['categories'=>$categories, ] );
+ $page_content=includeTemplate('./templates/index.php', ['categories'=>$categories, 'lots'=>$lots, 'lot_time_remaining'=>$lot_time_remaining] );
+ 
+ $layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'Главная']  );
+ 
+ print($layout_content);
  
 ?>

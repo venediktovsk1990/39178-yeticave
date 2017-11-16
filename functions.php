@@ -2,15 +2,17 @@
 
 function includeTemplate( $tempName, $paramsArray){
 	
+	extract($paramsArray);
 	$result='';
-	if( !file_exist($tempName) ){
+	if( !file_exists($tempName) ){
 		return $result;
 	}
-	
 	if( isset($paramsArray)){
-		requite_once($tempName);
+		ob_start();
+        include_once $tempName;
+        $result=ob_get_clean();
 	}
-
+	return $result;
 }
 
 ?>
