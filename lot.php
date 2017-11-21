@@ -8,7 +8,7 @@ $layout_content='';
 
 	if( isset( $_GET['lotIndex'] ) && isset( $lots[ $_GET['lotIndex'] ] )  ){
 		$lotIndex=$_GET['lotIndex'];
-		$page_content=includeTemplate('./templates/lot.php', ['categories'=>$categories, 'lots'=>$lots, 'bets'=>$bets, 'lotIndex'=>$lotIndex,] );
+		$page_content=includeTemplate('./templates/lot.php', ['categories'=>$categories, 'lot'=>$lots[$lotIndex], 'bets'=>$bets,] );
 		$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>$lots[$lotIndex]['name']]  );
 		print($layout_content);
 	 }else{
