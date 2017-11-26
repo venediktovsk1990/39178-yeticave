@@ -40,11 +40,13 @@ $layout_content='';
 		}
 		
 		$form_values = $gif;
-		//print( count($error) );
 		if( count($error) ){
 			$page_content=includeTemplate('./templates/add_lot_temp.php', ['categories'=>$categories, 'form_values'=>$form_values, 'errors'=>$error,] );
 		}else{
-			//$page_content=includeTemplate('./templates/add_lot_temp.php', ['categories'=>$categories] );
+
+			$lots[] = [ 'name'=>strip_tags($form_values['lot-name']), 'category'=>$form_values['category'], 'cost'=>strip_tags($form_values['lot-rate']), 'img'=>$form_values['path'] ];
+			$lotIndex = count($lots)-1;
+			$page_content=includeTemplate('./templates/lot.php', ['categories'=>$categories, 'lot'=>$lots[$lotIndex], 'bets'=>$bets,] );
 		}
 		
 	}else{
