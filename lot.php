@@ -68,7 +68,7 @@ $cookie_domain="yeticave";
 				$cookie_value_array[] = [ 'index'=>$lot_index, 'time'=>$current_date, 'cost'=>$cost ];
 			}
 			$cookie_value_string = json_encode($cookie_value_array);
-			setcookie($cookie_name, $cookie_value_string, $cookie_date, $path, $cookie_domain. true, true);
+			setcookie($cookie_name, $cookie_value_string, $cookie_date, $path, $cookie_domain);
 			header("Location: http://yeticave/mylots.php");
 			exit();
 		}
