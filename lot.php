@@ -70,6 +70,7 @@ $cookie_domain="yeticave";
 			$cookie_value_string = json_encode($cookie_value_array);
 			setcookie($cookie_name, $cookie_value_string, $cookie_date, $path, $cookie_domain. true, true);
 			header("Location: http://yeticave/mylots.php");
+			exit();
 		}
 	}
 ?>
