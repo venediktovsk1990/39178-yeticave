@@ -27,8 +27,6 @@ $cookie_domain="yeticave";
 			}
 			
 			$template_data['lot_index']=$lot_index;
-			var_dump($template_data);
-			var_dump($lot_index);
 			$page_content=includeTemplate('./templates/lot.php', ['categories'=>$categories, 'lot'=>$lots[$lot_index], 'template_data'=>$template_data, 'bets'=>$bets,] );
 			$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>$lots[$lot_index]['name']]  );
 			print($layout_content);
