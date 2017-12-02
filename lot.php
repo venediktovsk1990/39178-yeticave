@@ -7,29 +7,29 @@ $page_content='';
 $layout_content='';
 $numeric=['cost'];
 $has_errors = false;
-$template_values['disabled'] ="";
+$template_data['disabled'] =(bool)false;
+$cookie_domain="yeticave";
 	
 	if($_SERVER['REQUEST_METHOD'] == "GET" ){
 		
 		//пользователь перешел сам на данную страницу
 		if( isset( $_GET['lotIndex'] ) && isset( $lots[ $_GET['lotIndex'] ] )  ){
 			$lot_index=$_GET['lotIndex'];
-			//$template_values[]=[ 'lot_index'=>(int)$lot_index];
 			//получаем id лотов из куки
 			if( isset($_COOKIE[$cookie_name] ) ){
 				$cookie_value_array = json_decode( $_COOKIE[$cookie_name], true);
 				foreach( $cookie_value_array as $key=>$lot){
 					if( $lot_index == $lot['index'] ){
-						$template_values['disabled'] ="disabled";
+						$template_data['disabled'] =(bool)true;
 					}
 				}
 			
 			}
 			
-			$template_values['lot_index']=$lot_index;
-			var_dump($template_values);
+			$template_data['lot_index']=$lot_index;
+			var_dump($template_data);
 			var_dump($lot_index);
-			$page_content=includeTemplate('./templates/lot.php', ['categories'=>$categories, 'lot'=>$lots[$lot_index], 'template_values'=>$template_values, 'bets'=>$bets,] );
+			$page_content=includeTemplate('./templates/lot.php', ['categories'=>$categories, 'lot'=>$lots[$lot_index], 'template_data'=>$template_data, 'bets'=>$bets,] );
 			$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>$lots[$lot_index]['name']]  );
 			print($layout_content);
 		 }else{
@@ -51,9 +51,9 @@ $template_values['disabled'] ="";
 			}
 		}
 		$lot_index = (int)$_POST['lot_index'];
-		$template_values[]=[ 'lot_index'=>(int)$lot_index];
+		$template_data[]=[ 'lot_index'=>(int)$lot_index];
 		if( $has_errors ){
-			$page_content=includeTemplate('./templates/lot.php', ['categories'=>$categories, 'lot'=>$lots[$lot_index], 'template_values'=>$template_values, 'bets'=>$bets,] );
+			$page_content=includeTemplate('./templates/lot.php', ['categories'=>$categories, 'lot'=>$lots[$lot_index], 'template_data'=>$template_data, 'bets'=>$bets,] );
 			$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>$lots[$lot_index]['name']]  );
 			print($layout_content);
 		}else{
@@ -70,7 +70,7 @@ $template_values['disabled'] ="";
 				$cookie_value_array[] = [ 'index'=>$lot_index, 'time'=>$current_date, 'cost'=>$cost ];
 			}
 			$cookie_value_string = json_encode($cookie_value_array);
-			setcookie($cookie_name, $cookie_value_string, $cookie_date, $path);
+			setcookie($cookie_name, $cookie_value_string, $cookie_date, $path, $cookie_domain. true, true);
 			header("Location: http://yeticave/mylots.php");
 		}
 	}

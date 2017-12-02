@@ -57,14 +57,19 @@
 								Мин. ставка <span>12 000 р</span>
 							</div>
 						</div>
-						<form class="lot-item__form" action="lot.php" method="post"   >
-							<p class="lot-item__form-item" >
-								<label for="cost">Ваша ставка</label>
-								<input id="cost" type="number" name="cost" placeholder="12 000 " <?=$template_values['disabled'] ?> > 
-								<input id="lotIndex" name="lot_index" value="<?=$template_values['lot_index'] ?>" type="hidden" name="cost" placeholder="12 000">
-							</p>
-							<button  type="submit" class="button" <?=$template_values['disabled'] ?> >Сделать ставку</button>
-						</form>
+
+						<?php if( !$template_data['disabled']): ?>
+							
+							<form class="lot-item__form" action="lot.php" method="post"   >
+								<p class="lot-item__form-item" >
+									<label for="cost">Ваша ставка</label>
+									<input id="cost" type="number" name="cost" placeholder="12 000 "  > 
+									<input id="lotIndex" name="lot_index" value="<?=$template_data['lot_index'] ?>" type="hidden" name="cost" placeholder="12 000">
+								</p>
+								<button  type="submit" class="button"  >Сделать ставку</button>
+							</form>
+						<?php endif; ?>
+						
 					</div>
 					
 					
