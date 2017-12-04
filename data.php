@@ -21,6 +21,7 @@ $is_auth = (bool) rand(0, 1);
 
 $user_name = 'Константин';
 $user_avatar = 'img/user.jpg';
+$cookie_name = "bits_data";
 
 // устанавливаем часовой пояс в Московское время
 date_default_timezone_set('Europe/Moscow');
