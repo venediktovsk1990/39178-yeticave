@@ -30,7 +30,9 @@
 			</div>
 			<div class="user-menu__logged">
 				<p> <?=$user_name; ?> </p>
+				<p> <a href="logout.php">Выход</a> </p>
 			</div>
+			
 					
 		<?php else: ?>
 			 <ul class="user-menu__list">
@@ -38,7 +40,7 @@
 					<a href="#">Регистрация</a>
 				</li>
 				<li class="user-menu__item">
-					<a href="#">Вход</a>
+					<a href="login.php">Вход</a>
 				</li>
 			</ul>
 		<?php endif; ?>

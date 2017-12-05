@@ -17,9 +17,9 @@ $bets = [
     ['name' => 'Семён', 'price' => 10000, 'ts' => strtotime('last week')]
 ];
 
-$is_auth = (bool) rand(0, 1);
+$is_auth = (bool)false;
 
-$user_name = 'Константин';
+$user_name = '';
 $user_avatar = 'img/user.jpg';
 $cookie_name = "bits_data";
 

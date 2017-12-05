@@ -1,6 +1,7 @@
 <?php
 require_once('./data.php');
 require_once('./functions.php');
+require_once('./init.php');
 $page_content='';
 $layout_content='';
 
@@ -73,9 +74,16 @@ $layout_content='';
 		}
 		
 	}else{
-		$page_content=includeTemplate('./templates/add_lot_temp.php', ['categories'=>$categories, [] ] );
-		$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'Добавление нового лота'] );
-		print($layout_content);
+		if( isset($_SESSION['user'] ) ){
+		
+			$page_content=includeTemplate('./templates/add_lot_temp.php', ['categories'=>$categories, [] ] );
+			$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'Добавление нового лота'] );
+			print($layout_content);
+		}else{
+			http_response_code(404);
+			header("Location: http://yeticave/403.php");
+			exit();
+		}
 	}
 		
 	
