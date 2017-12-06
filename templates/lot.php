@@ -58,7 +58,7 @@
 							</div>
 						</div>
 
-						<?php if( !$template_data['disabled']): ?>
+						<?php if( !$template_data['disabled'] && $template_data['is_auth'] ): ?>
 							
 							<form class="lot-item__form" action="lot.php" method="post"   >
 								<p class="lot-item__form-item" >

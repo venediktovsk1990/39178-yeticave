@@ -3,6 +3,7 @@
 
 require_once('./data.php');
 require_once('./functions.php');
+require_once('./init.php');
 $page_content='';
 $layout_content='';
 $numeric=['cost'];
@@ -20,10 +21,21 @@ $cookie_domain="yeticave";
 				$cookie_value_array = json_decode( $_COOKIE[$cookie_name], true);
 				foreach( $cookie_value_array as $key=>$lot){
 					if( $lot_index == $lot['index'] ){
-						$template_data['disabled'] =(bool)true;
+						$template_data['disabled'] =true;
 					}
 				}
 			
+			}
+			
+			//проверка истечения срока аукциона
+			$now=strtotime('now');
+			
+
+			
+			if( isset( $_SESSION['user']  ) ){
+				$template_data['is_auth'] = true;
+			}else{
+				$template_data['is_auth'] = false;
 			}
 			
 			$template_data['lot_index']=$lot_index;
@@ -33,7 +45,7 @@ $cookie_domain="yeticave";
 		 }else{
 			http_response_code(404);
 			
-			$page_content=includeTemplate('./templates/404.php', ['text'=>''] );
+			$page_content=includeTemplate('./templates/404_temp.php', ['text'=>''] );
 			$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'404 Page not found']  );
 			print($layout_content);
 		}

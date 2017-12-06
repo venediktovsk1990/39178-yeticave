@@ -2,8 +2,8 @@
 
  
  require_once('./data.php');
-
  require_once('./functions.php');
+ require_once('./init.php');
  
  $page_content=includeTemplate('./templates/index.php', ['categories'=>$categories, 'lots'=>$lots, 'lot_time_remaining'=>$lot_time_remaining] );
  

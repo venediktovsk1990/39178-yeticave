@@ -3,6 +3,7 @@
 
 require_once('./data.php');
 require_once('./functions.php');
+require_once('./init.php');
 $page_content='';
 $layout_content='';
 		
