@@ -5,7 +5,7 @@ CREATE TABLE users (
 	name CHAR(128),
 	date_registration DATETIME,
 	email CHAR(128),
-	password CHAR(32),
+	password CHAR(128),
 	contacts CHAR(128),
 	avatar CHAR(250),
 	is_deleted TINYINT(1)
@@ -23,10 +23,11 @@ CREATE TABLE lots (
 	category_id INT,
 	date_creation DATETIME,
 	bidding_ending DATETIME,
-	creator_id CHAR(128),
+	creator_id CHAR(128) NOT NULL,
 	winer_id INT,
 	cost INT,
 	cost_step INT,
+	image CHAR(250),
 	subscribe BLOB(1024),
 	is_deleted TINYINT(1)
 );
@@ -38,9 +39,9 @@ CREATE INDEX bidding_ending_index ON lots(bidding_ending);
 	CREATE TABLE bids (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	bid_date DATETIME,
-	user_id CHAR(128),
-	lot_id INT,
-	cost INT,
+	user_id INT NOT NULL,
+	lot_id INT NOT NULL,
+	cost INT NOT NULL,
 	is_deleted TINYINT(1)
 );
 
