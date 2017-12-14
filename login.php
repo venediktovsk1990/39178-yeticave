@@ -1,12 +1,12 @@
 <?php
 require_once('./data.php');
 require_once('./functions.php');
-require_once('./userdata.php');
+require_once('./init.php');
 
 $page_content='';
 $layout_content='';
 
-	session_start();
+
 
 	//валидация формы
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -22,6 +22,27 @@ $layout_content='';
 				}
 			}
 		}
+			
+		//получаем пользователей из БД
+		if (!$link) {
+			$error = mysqli_connect_error();
+			$page_content = include_template('templates/error_temp.php', ['error_text' => $error]);
+			$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'categories'=>[], 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'Главная']  );
+			print($layout_content);
+			exit();
+		}
+		//получаем категории
+		$sql = 'SELECT * FROM users';
+		$result = mysqli_query($link, $sql);
+
+		if( !$result ){
+			$error = mysqli_error($link);
+			$page_content = include_template('templates/error_temp.php', ['error_text' => $error]);
+			$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'categories'=>[], 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'Главная']  );
+			print($layout_content);
+			exit();
+		}
+		$users = mysqli_fetch_all($result, MYSQLI_ASSOC);
 			
 		if( $user = searchUserByEmail($form_data['email'], $users)) {
 			if (password_verify($form_data['password'], $user['password'])) {

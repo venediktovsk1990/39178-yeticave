@@ -6,6 +6,8 @@ $layout_content='';
 	session_start();
 	if(isset($_SESSION['user']) ){
 		$user_name = $_SESSION['user']['name'];
+		$user_avatar = $_SESSION['user']['avatar'];
+		$user_id = $_SESSION['user']['id'];
 		$is_auth = true;
 	}
 

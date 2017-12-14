@@ -1,5 +1,5 @@
 <?php
- $categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
+ /*$categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
  $lots = [
 	[ 'name'=>'2014 Rossignol District Snowboard', 'category'=>'Доски и лыжи', 'cost'=>'10999', 'img'=>'img/lot-1.jpg'],
 	[ 'name'=>'DC Ply Mens 2016/2017 Snowboard', 'category'=>'Доски и лыжи', 'cost'=>'159999', 'img'=>'img/lot-2.jpg'],
@@ -16,11 +16,12 @@ $bets = [
     ['name' => 'Евгений', 'price' => 10500, 'ts' => strtotime('-' . rand(25, 50) .' hour')],
     ['name' => 'Семён', 'price' => 10000, 'ts' => strtotime('last week')]
 ];
+*/
 
 $is_auth = (bool)false;
-
 $user_name = '';
-$user_avatar = 'img/user.jpg';
+$user_avatar = '';
+$user_id = '';
 $cookie_name = "bits_data";
 
 // устанавливаем часовой пояс в Московское время

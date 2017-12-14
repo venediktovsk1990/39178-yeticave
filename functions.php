@@ -34,7 +34,8 @@ function getNumEnding( $number, $endingArray){
 
 
 
-function howLongTime( int $lastTime ){
+function howLongTime(  $lastSqlTime ){
+	$lastTime = strtotime($lastSqlTime);
 	$now=strtotime('now');
 	$hoursName=["час", "часа", "часов"];
 	$minutesName=["минута", "минуты", "минут"];
@@ -68,4 +69,18 @@ function searchUserByEmail($email, $users) {
 	return $result;
 }
 
+
+//функция вычесляет временную метку до конца торгов и переводит ее в формат php. return текстовое представление
+function howLongTimeForEndString( $finish_sql_date){
+	$finish = strtotime($finish_sql_date);   
+	$now = strtotime('now');
+	return date("m/d H:i", $finish - $now);
+}
+
+//функция вычесляет временную метку до конца торгов и переводит ее в формат php. retun число
+function howLongTimeForEndDigit( $finish_sql_date){
+	$finish = strtotime($finish_sql_date);   
+	$now = strtotime('now');
+	return ($finish - $now);
+}
 ?>
