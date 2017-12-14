@@ -49,8 +49,8 @@
         <select id="category" name="category" >
 			<option>Выберите категорию</option>
 			<?php foreach( $categories as $category): ?>
-				<?php $selected = $form_values['category'] == $category ? "selected" : ""; ?>
-				<option <?=$selected?> ><?=$category?></option>
+				<?php $selected = $form_values['category'] == $category['title'] ? "selected" : ""; ?>
+				<option <?=$selected?> ><?=$category['title']?></option>
 			<?php endforeach; ?>
 		  </select>
         <span class="form__error">Выберите категорию</span>
@@ -82,7 +82,7 @@
         </div>
       </div>
       <div class="form__input-file">
-        <input class="visually-hidden" type="file" id="photo2" name="jpg_img" value="">
+        <input class="visually-hidden" type="file" id="photo2" name="img" value="">
         <label for="photo2">
           <span>+ Добавить</span>
         </label>
