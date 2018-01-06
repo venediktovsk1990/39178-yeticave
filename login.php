@@ -1,77 +1,93 @@
 <?php
 require_once('./data.php');
 require_once('./functions.php');
+require_once('./sql_functions.php');
 require_once('./init.php');
 
-$page_content='';
-$layout_content='';
+function checkUser( $link, &$error, &$formData ){
+
+			$users = getUsers( $link );
+
+			if( $user = searchUserByEmail($formData['email'], $users)) {
+				if (password_verify($formData['password'], $user['password'])) {
+					$_SESSION['user'] = $user;
+
+				}
+				else {
+					$errors[$dict['password']] = 'Вы ввели неверный пароль	';
+				}
+			}else {
+				$errors[$dict['email']] = 'Такой пользователь не найден';
+			}
+
+}
 
 
 
-	//валидация формы
-	if($_SERVER['REQUEST_METHOD'] == 'POST'){
-		
+function checkFormFields( &$formData ){
 		$required=['email', 'paswword'];
 		$dict=['email'=>'Ваш email', 'password'=>'Пароль'];
 		$errors=[];
-		$form_data = $_POST;
-		foreach( $form_data as $key=>$value){
+		$formData = $_POST;
+		global $link;
+		foreach( $formData as $key=>$value){
 			if( in_array($key, $required)  ){
 				if( !$value ){
 					$errors[$dict[$key]] = 'Это поле надо заполнить';
 				}
 			}
 		}
-			
-		//получаем пользователей из БД
-		if (!$link) {
-			$error = mysqli_connect_error();
-			$page_content = include_template('templates/error_temp.php', ['error_text' => $error]);
-			$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'categories'=>[], 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'Главная']  );
-			print($layout_content);
-			exit();
-		}
-		//получаем категории
-		$sql = 'SELECT * FROM users';
-		$result = mysqli_query($link, $sql);
 
-		if( !$result ){
-			$error = mysqli_error($link);
-			$page_content = include_template('templates/error_temp.php', ['error_text' => $error]);
-			$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'categories'=>[], 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'Главная']  );
-			print($layout_content);
-			exit();
-		}
-		$users = mysqli_fetch_all($result, MYSQLI_ASSOC);
-			
-		if( $user = searchUserByEmail($form_data['email'], $users)) {
-			if (password_verify($form_data['password'], $user['password'])) {
-				$_SESSION['user'] = $user;
-				
+		checkuser( $link, $error, $formData );
+
+
+	return $error;
+}
+
+
+	$categories = getCategories($link );
+
+	if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+				$formData = [];
+				$errors = [];
+				$errors = checkFormFields( $formData );
+
+					if (count($errors)) {
+
+							$mainPageData['categories'] = $categories;
+							$mainPageData['formData'] = $formData;
+							$mainPageData['errors'] = $error;
+							$pageContent=includeTemplate('./templates/login_temp.php', $mainPageData );
+
+					}
+					else {
+							$address = getLocation("");
+							header($address);
+							exit();
+							//header("Location: http://yeticave");
+							//exit();
+					}
 			}
 			else {
-				$errors[$dict['password']] = 'Вы ввели неверный пароль	';
+				$mainPageData['categories'] = $categories;
+				$pageContent = includeTemplate('./templates/login_temp.php', $mainPageData );
 			}
-		}else {
-			$errors[$dict['email']] = 'Такой пользователь не найден';
-		}
-		
-		if (count($errors)) {
-			$page_content = includeTemplate('./templates/login_temp.php', ['form_data' => $form_data, 'errors' => $errors]);
-		}
-		else {
-			header("Location: http://yeticave");
-			exit();
-		}
-	}
-	else {
-		$page_content = includeTemplate('./templates/login_temp.php', []);
-	}
-		
-	$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'Регистрация']  );
-	print($layout_content);
-		
-		
-	
- 
+
+
+
+	$layoutPageData['mainContent'] = $pageContent;
+	$layoutPageData['categories'] = $categories;
+	$layoutPageData['isAuth'] = $isAuth;
+	$layoutPageData['userName'] = $userName;
+	$layoutPageData['userAvatar'] = $userAvatar;
+	$layoutPageData['title'] = "Регистрация";
+
+	$layoutContent=includeTemplate('./templates/layout.php', $layoutPageData );
+
+	print($layoutContent);
+
+
+
+
 ?>

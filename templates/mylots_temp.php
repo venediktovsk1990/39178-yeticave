@@ -1,34 +1,22 @@
- <nav class="nav">
-    <ul class="nav__list container">
-      <li class="nav__item">
-        <a href="all-lots.html">Доски и лыжи</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Крепления</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Ботинки</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Одежда</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Инструменты</a>
-      </li>
-      <li class="nav__item">
-        <a href="all-lots.html">Разное</a>
-      </li>
-    </ul>
-  </nav>
+<nav class="nav">
+     <ul class="nav__list container">
+       <?php foreach( $categories as $category): ?>
+         <li class="nav__item">
+           <a href=""><?=$category['title']?></a>
+         </li>
+       <?php endforeach; ?>
+     </ul>
+</nav>
+
   <section class="rates container">
     <h2>Мои ставки</h2>
     <table class="rates__list">
-	
-		<?php foreach( $bids as $key=>$bid ) : 
+
+		<?php foreach( $bids as $key=>$bid ) :
 			$title = $bid['title'];
-			$bit_time = $bid['bid_date'];
+			$betTime = $bid['bid_date'];
 			$cost = $bid['cost'];
-			$finish_time = $bid['bidding_ending'];
+			$finishTime = $bid['bidding_ending'];
 			$categories = $bid['categories'];
 			$img = $bid['image'];
 		?>
@@ -43,18 +31,18 @@
 			  <?=$categories?>
 			</td>
 			<td class="rates__timer">
-			  <div class="timer timer--finishing"><?=howLongTimeForEndString($finish_time)?></div>
+			  <div class="timer timer--finishing"><?=howLongTimeForEndString($finishTime)?></div>
 			</td>
 			<td class="rates__price">
 			  <?=$cost?> р
 			</td>
 			<td class="rates__time">
-			  <?=howLongTime($bit_time); ?>
+			  <?=howLongTime($betTime); ?>
 			</td>
 		  </tr>
 	  <?php endforeach; ?>
-	  
-	  
-      
+
+
+
     </table>
   </section>

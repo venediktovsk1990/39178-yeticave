@@ -1,12 +1,23 @@
 <?php
 require_once('./data.php');
 require_once('./functions.php');
+require_once('./sql_functions.php');
 require_once('./init.php');
-$page_content='';
-$layout_content='';
-	$page_content=includeTemplate('./templates/403_temp.php', ['text'=>''] );
-	$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'404 Page not found']  );
-	print($layout_content);
+
+	$categories = getCategories( $link );
+ 
+	$pageContent=includeTemplate('./templates/403_temp.php', $mainPageData );
+
+
+	$layoutPageData['mainContent'] = $pageContent;
+	$layoutPageData['categories'] = $categories;
+	$layoutPageData['isAuth'] = $isAuth;
+	$layoutPageData['userName'] = $userName;
+	$layoutPageData['userAvatar'] = $userAvatar;
+	$layoutPageData['title'] = "404 Page not found";
+
+	$layoutContent=includeTemplate('./templates/layout.php', $layoutPageData );
+	print($layoutContent);
 
 
 ?>

@@ -1,127 +1,156 @@
 <?php
 require_once('./data.php');
 require_once('./functions.php');
+require_once('./sql_functions.php');
 require_once('./init.php');
-require_once("./slq_functions.php");
-$page_content='';
-$layout_content='';
-
-	
-	$categories = getLots($link, $page_content, $layout_content);
 
 
-	//валидация формы
-	if($_SERVER['REQUEST_METHOD'] == 'POST'){
-	
+function checkFile( &$error, &$formData ){
 
-		$required=['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
-		$math=['lot-rate', 'lot-step'];
-		$dict=['lot-name'=>'Название', 'category'=>'Категория', 'message'=>'Описание', 'lot-rate'=>'Начальная цена', 'lot-step'=>'Шаг ставки', 'lot-date'=>'Дата окончания торгов'];
+		if ( (isset( $_FILES['photo2']['name']) ) && ( $_FILES['photo2']['name'] != "" ) ) {
+
+				$tmpName = $_FILES['photo2']['tmp_name'];
+				$path = $_FILES['photo2']['name'];
+
+				$fileType = mime_content_type($tmpName);
+				if ( ($fileType !== "image/jpeg") && ($fileType !== "image/png") && ($fileType !== "image/gif") ) {
+					$error['Файл'] = 'Загрузите картинку в формате png или jpeg или  gif';
+				}
+				else {
+					move_uploaded_file($tmpName, "./img/" . $path);
+					$formData['path'] =( "img/" . $path);
+
+				}
+		}
+}
+
+
+function checkEmail( $link, &$error, &$formData ){
+
+	$isEmailFree = true;
+
+	if( isset($_POST['email']) ){
+				$email = $_POST['email'];
+				$result = filter_var( $email, FILTER_VALIDATE_EMAIL);
+				if( $result == false ){
+					$error['email']="Вы указали неверный email";
+				}else{
+						$userData = getUsersEmail($link );
+						if( isset( $userData) ){
+							foreach ($userData as $emailItem ) {
+								if( $emailItem['email'] == $email ){
+										$isEmailFree = false;
+								}
+							}
+						}
+
+						if( !$isEmailFree ){
+								$error['email']="Данный email уже занят другим пользователем";
+						}
+			}
+	}
+
+
+
+}
+
+function passwToHash( &$error, &$formData ){
+
+	if( count($error) == 0 ){
+			$hashPasw = $formData['password'];
+			$hashPasw = password_hash( $formData['password'], PASSWORD_DEFAULT );
+
+			if( $hashPasw == FALSE){
+					$error[$dict['passsword'] ] = "при работе с этим полем возникла ошибка, измените его и поробуйте еще раз";
+			}else{
+				$formData['password'] = $hashPasw;
+			}
+	}
+
+}
+
+function checkFormFields( &$formData ){
+		$required=['email', 'password', 'name', 'message'];
+		$dict=['name'=>'Имя', 'email'=>'email', 'password'=>'Пароль', 'message'=>'Контактные данные'];
 		$error=[];
-		$form_values = $_POST;
-		
+		$formData = $_POST;
+		global $link;
+
 		foreach( $_POST as $key=>$value){
 			if( in_array($key, $required)  ){
 				if( !$value ){
 					$error[$dict[$key]] = 'Это поле надо заполнить';
 				}
-				if( $key == 'category') {
-					$flag = false;
-					
-					foreach( $categories as $category=>$val ){
-						if( $value == $val['title'] ){
-							$flag = true;
-						}
-					}
-					if( !$flag ){
-						$error[$dict[$key]] = 'Выбирите категорию';
-					}
-				}
 			}
-			
 			//удаление из пользовательского ввода нежелательных символов
-			$value = strip_tags($value);
-			
-			
-			//проверка что ввели только числа
-			if( $value && in_array($key, $math)){
-				if( !is_numeric($value) ){
-					$error[$dict[$key]] = 'В это поле нужно вводить только числовые значения';
-				}else{
-					$value = (int)$value;
-				}
-			}
+			$value = checkInput($value);
 		}
-		
-		//проверка загрузки файла
-		//print( isset( $_FILES['jpg_img']['name'] )); //не нормальное поведение при повторной отправки формы на проверке без загрузки файла.
-		if ( (isset( $_FILES['img']['name']) ) && ( $_FILES['img']['name'] != "" ) ) {
-			$tmp_name = $_FILES['img']['tmp_name'];
-			$path = $_FILES['img']['name'];
 
-			$finfo = finfo_open(FILEINFO_MIME_TYPE);
-			$file_type = finfo_file($finfo, $tmp_name);
-			if ( ($file_type !== "image/jpeg") && ($file_type !== "image/png") && ($file_type !== "image/gif") ) {
-				$error['Файл'] = 'Загрузите картинку';
-			}
-			else {
-				move_uploaded_file($tmp_name, "./img/" . $path);
-				$form_values['path'] =( "/img/" . $path);
-				
-			}
-		}else{
-			$error['Файл']="Вы не загрузили файл";
-		}
-		
+		checkFile( $error, $formData );
 
-		//в зависимости от валидации выводим разные страницы
+		checkEmail( $link, $error, $formData );
+
+		passwToHash( $error, $formData );
+
+
+	return $error;
+}
+
+
+	$categories = getCategories( $link );
+
+
+	if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+		$formData = [];
+		$error = [];
+		$error = checkFormFields( $formData );
+
 		if( count($error) ){
-			$page_content=includeTemplate('./templates/add_lot_temp.php', ['categories'=>$categories, 'form_values'=>$form_values, 'errors'=>$error,] );
-			$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'Добавление нового лота'] );
-			print($layout_content);
-		}else{
-			//добавляем новый лот
-			
-			//получаем id категории
-			//получаем категории
-			$sql = 'SELECT id FROM categories WHERE title="' . $form_values['category'] . '"';
-			$result = mysqli_query($link, $sql);
 
-			if( !$result ){
-				$error = mysqli_error($link);
-				$page_content = includeTemplate('templates/error_temp.php', ['error_text' => $error]);
-				$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'categories'=>categories, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'Главная']  );
-				print($layout_content);
-				exit();
-			}
-			$category_id = mysqli_fetch_all($result, MYSQLI_ASSOC);
-			
-			$sql = 'INSERT INTO lots (lots.date_creation, lots.title, lots.category_id, lots.bidding_ending, lots.creator_id, lots.cost, lots.image, lots.cost_step, lots.subscribe, lots.current_cost) VALUES(CURRENT_TIMESTAMP(), ?, ?,  ?, ?, ?, ?, ?, ?, ? )';
-			$stmt = mysqli_prepare($link, $sql);
-			mysqli_stmt_bind_param($stmt, 'sisiisisi', $form_values['lot-name'], $category_id, $form_values['lot-date'], $user_id,  $form_values['lot-rate'], $form_values['path'], $form_values['lot-step'], $form_values['message'], $form_values['lot-rate'] );
-			$result = mysqli_stmt_execute($stmt);
-			if( !$result ){
-				$error = mysqli_error($link);
-				$page_content = includeTemplate('templates/error_temp.php', ['error_text' => $error]);
-				$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'categories'=>$categories, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'Ошибка']  );
-				print($layout_content);
-				exit();
-			}
-					
-			$lotIndex = mysqli_insert_id($link);
-			$address = "Location: http://yeticave/lot.php?lotIndex=" . (string)$lotIndex;
+				$mainPageData['categories'] = $categories;
+			  $mainPageData['formData'] = $formData;
+			  $mainPageData['errors'] = $error;
+				$pageContent=includeTemplate('./templates/sign-up_temp.php', $mainPageData );
+
+				$layoutPageData['mainContent'] = $pageContent;
+			  $layoutPageData['categories'] = $categories;
+			  $layoutPageData['isAuth'] = $isAuth;
+			  $layoutPageData['userName'] = $userName;
+			  $layoutPageData['userAvatar'] = $userAvatar;
+			  $layoutPageData['title'] = "Добавление нового пользователя";
+
+				$layoutContent=includeTemplate('./templates/layout.php', $layoutPageData );
+
+				print($layoutContent);
+		}else{
+
+			addNewUser( $link, $formData );
+			$address = getLocation("login.php");
 			header($address);
 			exit();
+
 		}
-		
+
 	}else{
-			$page_content=includeTemplate('./templates/sign-up_temp.php', ['categories'=>$categories, [] ] );
-			$layout_content=includeTemplate('./templates/layout.php', ['main_content'=>$page_content, 'categories'=>$categories, 'is_auth'=>$is_auth, 'user_name'=>$user_name, 'user_avatar'=>$user_avatar, 'title'=>'Добавление нового пользователя'] );
-			print($layout_content);
-		
+
+			$mainPageData['categories'] = $categories;
+			$pageContent=includeTemplate('./templates/sign-up_temp.php', $mainPageData );
+
+			$layoutPageData['mainContent'] = $pageContent;
+			$layoutPageData['categories'] = $categories;
+			$layoutPageData['isAuth'] = $isAuth;
+			$layoutPageData['userName'] = $userName;
+			$layoutPageData['userAvatar'] = $userAvatar;
+			$layoutPageData['title'] = "Добавление нового пользователя";
+
+			$layoutContent=includeTemplate('./templates/layout.php', $layoutPageData );
+
+			print($layoutContent);
+
 	}
-	
-		
-	
- 
+
+
+
+
 ?>

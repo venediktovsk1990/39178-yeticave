@@ -7,8 +7,8 @@
 				<li class="promo__item promo__item--boards">
 					<a class="promo__link" href="all-lots.html"> <?=$category['title']; ?></a>
 				</li>
-			<?php 
-				endforeach; 
+			<?php
+				endforeach;
 			endif;
 			?>
         </ul>
@@ -19,9 +19,9 @@
         </div>
         <ul class="lots__list">
 			<?php foreach( $lots as $lot ):
-				$lot_time_remaining= howLongTimeForEndString( $lot['bidding_ending'] );
+				$lotTimeRemaining= howLongTimeForEndString( $lot['bidding_ending'] );
 			?>
-				
+
 				<li class="lots__item lot">
 					<div class="lot__image">
 						<img src=<?=$lot['image'] ?> width="350" height="260" alt="Сноуборд">
@@ -35,12 +35,12 @@
 								<span class="lot__cost"> <?=$lot['current_cost']; ?> <b class="rub">р</b></span>
 							</div>
 							<div class="lot__timer timer">
-								<?=$lot_time_remaining;?>
+								<?=$lotTimeRemaining;?>
 							</div>
 						</div>
 					</div>
 				</li>
-				
+
 			<?php endforeach; ?>
         </ul>
     </section>

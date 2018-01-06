@@ -6,9 +6,9 @@
 					</li>
 				<?php endforeach; ?>
 			</ul>
-		</nav>
-	
-	
+</nav>
+
+
 		<section class="lot-item container">
 			<h2><?=$lot['title']?></h2>
 			<div class="lot-item__content">
@@ -19,8 +19,8 @@
 					<p class="lot-item__category">Категория: <span><?=$lot['category']?></span></p>
 					<p class="lot-item__description"><?=$lot['subscribe']?></p>
 				</div>
-				
-				
+
+
 				<div class="lot-item__right" >
 					<div class="lot-item__state">
 						<div class="lot-item__timer timer">
@@ -36,22 +36,22 @@
 							</div>
 						</div>
 
-						<?php if( !$template_data['disabled'] && $template_data['is_auth'] ): ?>
-							
+						<?php if( $templateData['show'] ): ?>
+
 							<form class="lot-item__form" action="lot.php" method="post"   >
 								<p class="lot-item__form-item" >
 									<label for="cost">Ваша ставка</label>
-									<input id="cost" type="number" name="cost" placeholder="12 000 "  value="<?=$template_data['user_bid'] ?>" > 
-									<input id="lotIndex" name="lot_index" value="<?=$template_data['lot_index'] ?>" type="hidden" name="cost" placeholder="12 000">
+									<input id="cost" type="number" name="cost" placeholder=<?=($lot['current_cost'] + $lot['step'])?>  value="<?=$templateData['userBid'] ?>" >
+									<input id="lotIndex" name="lotIndex" value="<?=$templateData['lotIndex'] ?>" type="hidden"  >
 								</p>
 								<button  type="submit" class="button"  >Сделать ставку</button>
 							</form>
 						<?php endif; ?>
-						
+
 					</div>
-					
-					
-					
+
+
+
 					<div class="history">
 						<h3>История ставок (<span><?=count($bets)?></span>)</h3>
 						<!-- заполните эту таблицу данными из массива $bets-->
@@ -62,7 +62,7 @@
 									<td class="history__price"><?=$bet['cost']; ?></td>
 									<td class="history__time"><?=howLongTime($bet['bid_date']); ?> </td>
 								</tr>
-							<?php endforeach; ?>	
+							<?php endforeach; ?>
 						</table>
 					</div>
 				</div>
