@@ -43,4 +43,39 @@
 
 			<?php endforeach; ?>
         </ul>
+
+
+        <ul class="pagination-list">
+            <li class="pagination-item pagination-item-prev">
+              <?php if( $pageIndex == 1) : ?>
+                <a href="#">
+                  Назад
+                </a>
+              <?php else: ?>
+                <a href="index.php?page=<?=($pageIndex-1)?>">
+                  Назад
+                </a>
+              <?php endif; ?>
+            </li>
+
+            <?php  for( $i = 1; $i<=$pageCount; $i++): ?>
+              <?php $class = ($i == $pageIndex ? "pagination-item-active" : ""); ?>
+              <li class="pagination-item  <?=$class?>">
+                <a href="index.php?page=<?=$i?>" >
+                  <?=$i?>
+                </a>
+              </li>
+            <?php endfor; ?>
+            <li class="pagination-item pagination-item-next">
+            <?php if( $pageIndex == $pageCount ) : ?>
+                <a href="#">
+                  Вперед
+                </a>
+              <?php else: ?>
+                <a href="index.php?page=<?=($pageIndex+1)?>">
+                  Вперед
+                </a>
+              <?php endif;?>
+            </li>
+        </ul>
     </section>

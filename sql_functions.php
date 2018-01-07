@@ -56,6 +56,42 @@ function getLots( $link ){
 		return $lots;
 }
 
+function getLotCount( $link ){
+
+	$sql = 'SELECT COUNT(*) as count FROM lots';
+
+	$result = mysqli_query($link, $sql);
+	if( !$result ){
+		$error = mysqli_error($link);
+		errorSqlMessage( $error );
+	}
+
+	$row = mysqli_fetch_assoc($result);
+	$count = $row['count'];
+	mysqli_free_result($result);
+
+	return $count;
+
+
+}
+
+function getLotsPagination( $link, $pageIndex, $itemPerPage ){
+
+	$offset = ( $pageIndex - 1 ) * $itemPerPage;
+
+	$sql = 'SELECT lots.id, lots.title, lots.cost, lots.image, lots.current_cost, lots.bidding_ending,
+	categories.title category FROM lots JOIN categories ON categories.id=lots.category_id LIMIT ' . $itemPerPage . ' OFFSET ' . $offset;
+
+	$result = mysqli_query($link, $sql);
+	if( !$result ){
+		$error = mysqli_error($link);
+		errorSqlMessage( $error );
+	}
+	$lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	return $lots;
+
+}
+
 
 function getUsersEmail( $link ){
 	$sql = 'SELECT email  FROM users';

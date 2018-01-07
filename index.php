@@ -8,14 +8,16 @@
 
 
 	$categories = getCategories( $link );
+  $pageCount = getPageCount( $link, $itemPerPage );
+  isset( $_GET['page'] ) ? $pageIndex = $_GET['page'] : $pageIndex = 1;
 
-	//получаем все лоты
-
-	$lots = getLots( $link );
+  $lots = getLotsPagination( $link, $pageIndex, $itemPerPage );
 
   $mainPageData['categories'] = $categories;
   $mainPageData['lots'] = $lots;
   $mainPageData['lotTimeRemaining'] = $lotTimeRemaining;
+  $mainPageData['pageIndex'] = $pageIndex;
+  $mainPageData['pageCount'] = $pageCount;
 
 	$pageContent=includeTemplate('./templates/index_temp.php', $mainPageData );
 

@@ -25,7 +25,9 @@ $now = strtotime('now');
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
 $lotTimeRemaining=date("H:i", $tomorrow - $now);
 
-
 $secondsPerDay = 86400;
+
+$itemPerPage = 3;
+
 
  ?>

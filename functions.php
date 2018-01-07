@@ -145,7 +145,6 @@ function searchUserByEmail($email, $users) {
 
 	return $result;
 }
-
 /**
 функция вычесляет временную метку до конца торгов и переводит ее в формат php.
 @param finishSqlDate - временная метка в формате SQL окончания торгов
@@ -159,10 +158,11 @@ function howLongTimeForEndString( $finishSqlDate){
 	if( $time <= 0){
 		$result = "0/0 0:0";
 	}else{
-	  $result = date("m/d H:i", $finish - $now);
+		$result = date("m/d H:i", $finish - $now);
 	}
 	return $result;
 }
+
 
 /**
 функция вычесляет временную метку до конца торгов и переводит ее в формат php.
@@ -174,6 +174,22 @@ function howLongTimeForEndDigit( $finishSqlDate){
 	$now = strtotime('now');
 	return ($finish - $now);
 }
+
+
+/**
+функция вычесляет количество страниц, которое нужно чтобы отобразить все лоты
+@param link - параметр передаваемый во вспомогательную функцию
+@param itemPerPage - количество страниц на одну страницу
+@return число  - количество страниц, необходимое для отображения всех лотов
+*/
+function getPageCount( $link, $itemPerPage ){
+
+		$lots = getLotCount( $link );
+		$pageCount = ceil( $lots/$itemPerPage );
+		return $pageCount;
+}
+
+
 
 /**
 функция не используется, оставлена как пример кода для работы с куки
