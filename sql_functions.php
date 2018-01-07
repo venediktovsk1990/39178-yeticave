@@ -24,6 +24,7 @@ function getCategories( $link ){
 		}
 
 		$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		mysqli_free_result($result);
 		return $categories;
 }
 
@@ -37,6 +38,7 @@ function getCategoryId( $link, &$formData ){
 		errorSqlMessage( $error );
 	}
 	$categoryId = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	mysqli_free_result($result);
 	return $categoryId;
 
 }
@@ -53,6 +55,7 @@ function getLots( $link ){
 			errorSqlMessage( $error );
 		}
 		$lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		mysqli_free_result($result);
 		return $lots;
 }
 
@@ -88,6 +91,7 @@ function getLotsPagination( $link, $pageIndex, $itemPerPage ){
 		errorSqlMessage( $error );
 	}
 	$lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	mysqli_free_result($result);
 	return $lots;
 
 }
@@ -104,6 +108,7 @@ function getUsersEmail( $link ){
 	}
 
 	$email = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	mysqli_free_result($result);
 	return $email;
 
 }
@@ -120,6 +125,7 @@ function getUsers( $link ){
 	}
 
 	$email = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	mysqli_free_result($result);
 	return $email;
 
 }
@@ -138,7 +144,7 @@ function getLotById( $link, $lotIndex ){
 		errorSqlMessage( $error );
 	}
 	$lot = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
+	mysqli_free_result($result);
 	return $lot;
 
 }
@@ -154,7 +160,7 @@ function getBetsOfLot( $link, $lotIndex ){
 		errorSqlMessage( $error );
 	}
 	$bets = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
+	mysqli_free_result($result);
 	return $bets;
 
 }
@@ -170,7 +176,7 @@ function getBetsCountOfUser( $link, $userId, $lotIndex ){
 		exit();
 	}
 	$betsCount = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
+	mysqli_free_result($result);
 	return $betsCount;
 
 }
@@ -187,11 +193,30 @@ function getLotsWhereUserBids( $link, $userId ){
 		exit();
 	}
 	$bids = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
+	mysqli_free_result($result);
 	return  $bids;
 
 }
 
+
+function getLotsBySearch( $link, $keyWords ){
+
+		$sql = 'SELECT lots.id, lots.title, lots.subscribe, lots.cost, lots.image, lots.current_cost, lots.bidding_ending,
+		categories.title category FROM lots JOIN categories ON categories.id=lots.category_id
+		WHERE MATCH(  lots.title, lots.subscribe) AGAINST(?)';
+		$stmt = mysqli_prepare($link, $sql);
+		mysqli_stmt_bind_param($stmt, 's', $keyWords );
+		$result = mysqli_stmt_execute($stmt);
+		if( !$result ){
+				$error = mysqli_error($link);
+				errorSqlMessage( $error );
+		}
+
+		$result =  mysqli_stmt_get_result($stmt);
+		$lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		mysqli_free_result($result);
+		return  $lots;
+}
 
 function addNewUser( $link, &$userValues ){
 

@@ -1,5 +1,5 @@
---заполняем таблицу пользователей
-	INSERT INTO users SET 
+/*заполняем таблицу пользователей*/
+	INSERT INTO users SET
 			email ='ignat.v@gmail.com',
 			name = 'Игнат',
 			password = '$2y$10$OqvsKHQwr0Wk6FMZDoHo1uHoXd4UdxJG/5UDtUiie00XaxMHrW8ka',
@@ -8,7 +8,7 @@
 			avatar ='img/user.jpg',
 			is_deleted = FALSE;
 
-	INSERT INTO users SET 
+	INSERT INTO users SET
 			email ='kitty_93@li.ru',
 			name = 'Леночка',
 			password = '$2y$10$2OxpEH7narYpkOT1H5cApezuzh10tZEEQ2axgFOaKW.55LxIJBgWW',
@@ -17,8 +17,8 @@
 			avatar ='img/user2.jpg',
 			is_deleted = FALSE;
 
-			
-	INSERT INTO users SET 
+
+	INSERT INTO users SET
 			email ='warrior07@mail.ru',
 			name = 'Руслан',
 			password = '$2y$10$2OxpEH7narYpkOT1H5cApezuzh10tZEEQ2axgFOaKW.55LxIJBgWW',
@@ -26,34 +26,34 @@
 			contacts ='Narnia. Uzbek street avenu 3',
 			avatar ='img/user3.jpg',
 			is_deleted = FALSE;
-			
-	--заполняем таблицу катгорий		
-	INSERT INTO categories SET 
+
+	/*заполняем таблицу катгорий		*/
+	INSERT INTO categories SET
 			title = 'Доски и лыжи',
 			is_deleted = FALSE;
 
-	INSERT INTO categories SET 
+	INSERT INTO categories SET
 			title = 'Крепления',
 			is_deleted = FALSE;
 
-	INSERT INTO categories SET 
+	INSERT INTO categories SET
 			title = 'Ботинки',
 			is_deleted = FALSE;
 
-	INSERT INTO categories SET 
+	INSERT INTO categories SET
 			title = 'Одежда',
 			is_deleted = FALSE;
 
-	INSERT INTO categories SET 
+	INSERT INTO categories SET
 			title = 'Инструменты',
 			is_deleted = FALSE;
 
-	INSERT INTO categories SET 
+	INSERT INTO categories SET
 			title = 'Разное',
 			is_deleted = FALSE;
-			
-	--заполнение таблицы лотов
-	INSERT INTO lots SET 
+
+	/*заполнение таблицы лотов*/
+	INSERT INTO lots SET
 			title = '2014 Rossignol District Snowboard',
 			category_id = (SELECT  id FROM categories WHERE  title = 'Доски и лыжи'),
 			date_creation = CURRENT_TIMESTAMP(),
@@ -75,7 +75,7 @@
 			image = 'img/lot-1.jpg',
 			is_deleted = FALSE;
 
-	INSERT INTO lots SET 
+	INSERT INTO lots SET
 			title = 'DC Ply Mens 2016/2017 Snowboard',
 			category_id = (SELECT  id FROM categories WHERE  title = 'Доски и лыжи'),
 			date_creation = CURRENT_TIMESTAMP(),
@@ -87,7 +87,7 @@
 			image = 'img/lot-2.jpg',
 			is_deleted = FALSE;
 
-	INSERT INTO lots SET 
+	INSERT INTO lots SET
 			title = 'Крепления Union Contact Pro 2015 года размер L/XL',
 			category_id = (SELECT  id FROM categories WHERE  title = 'Крепления'),
 			date_creation = CURRENT_TIMESTAMP(),
@@ -98,8 +98,8 @@
 			cost_step = 10,
 			image = 'img/lot-3.jpg',
 			is_deleted = FALSE;
-			
-	INSERT INTO lots SET 
+
+	INSERT INTO lots SET
 			title = 'Ботинки для сноуборда DC Mutiny Charocal',
 			category_id = (SELECT  id FROM categories WHERE  title = 'Ботинки'),
 			date_creation = CURRENT_TIMESTAMP(),
@@ -110,7 +110,7 @@
 			cost_step = 50,
 			image = 'img/lot-4.jpg',
 			is_deleted = FALSE;
-	INSERT INTO lots SET 
+	INSERT INTO lots SET
 			title = 'Куртка для сноуборда DC Mutiny Charocal',
 			category_id = (SELECT  id FROM categories WHERE  title = 'Одежда'),
 			date_creation = CURRENT_TIMESTAMP(),
@@ -121,8 +121,8 @@
 			cost_step = 60,
 			image = 'img/lot-5.jpg',
 			is_deleted = FALSE;
-			
-	INSERT INTO lots SET 
+
+	INSERT INTO lots SET
 			title = 'Маска Oakley Canopy',
 			category_id = (SELECT  id FROM categories WHERE  title = 'Разное'),
 			date_creation = CURRENT_TIMESTAMP(),
@@ -133,49 +133,27 @@
 			cost_step = 50,
 			image = 'img/lot-6.jpg',
 			is_deleted = FALSE;
-			
 
-	-- заполняем таблицу ставок
-	
-	INSERT INTO bids SET 
+
+	/* заполняем таблицу ставо */
+
+	INSERT INTO bids SET
 			bid_date = CURRENT_TIMESTAMP(),
 			user_id = (SELECT  id FROM users WHERE  name = 'Игнат'),
-			lot_id (SELECT  id FROM lots WHERE  title = '2014 Rossignol District Snowboard'),
+			lot_id = (SELECT  id FROM lots WHERE  title = '2014 Rossignol District Snowboard'),
 			cost = 11999,
 			is_deleted = FALSE;
-			
-	INSERT INTO bids SET 
+
+	INSERT INTO bids SET
 			bid_date = CURRENT_TIMESTAMP(),
 			user_id = (SELECT  id FROM users WHERE  name = 'Леночка'),
 			lot_id = (SELECT  id FROM lots WHERE  title = 'DC Ply Mens 2016/2017 Snowboard'),
 			cost = 16999,
 			is_deleted = FALSE;
-			
-	INSERT INTO bids SET 
+
+	INSERT INTO bids SET
 			bid_date = CURRENT_TIMESTAMP(),
 			user_id = (SELECT  id FROM users WHERE  name = 'Руслан'),
 			lot_id = (SELECT  id FROM lots WHERE  title = 'Крепления Union Contact Pro 2015 года размер L/XL'),
 			cost = 8010,
 			is_deleted = FALSE;
-			
---получение всех категорий
-SELECT * FROM categories;
-
---самые новые созданные лоты
-SELECT lots.title, lots.cost, lots.image, lots.current_cost, categories.title  FROM lots JOIN categories ON categories.id=lots.category_id  JOIN bids ON lots.id=bids.lot_id WHERE lots.date_creation>=CURDATE();
-
---включать название, стартовую цену, ссылку на изображение, цену, количество ставок, название категории
-
---найти лот по его названию или описанию;
-SELECT title FROM lots WHERE title ='2014 Rossignol District Snowboard';
-SELECT title, subscribe, current_cost FROM lots WHERE subscribe LIKE '%Стекловолокно Bi-Ax%';
-
---обновить название лота по его идентификатору
-UPDATE lots SET title='Маска GOOGLE Glas' where title='Маска Oakley Canopy';
-
---получить список самых свежих ставок для лота по его идентификатору;
-SELECT id, cost, bid_date FROM bids WHERE bid_date>=CURDATE() AND user_id=2;
-
-	
-	
-	

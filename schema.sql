@@ -1,5 +1,7 @@
 CREATE DATABASE yeticave;
+
 USE yeticave;
+
 CREATE TABLE users (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name CHAR(128),
@@ -26,15 +28,17 @@ CREATE TABLE lots (
 	creator_id CHAR(128) NOT NULL,
 	winer_id INT,
 	cost INT,
+	current_cost INT,
 	cost_step INT,
 	image CHAR(250),
-	subscribe BLOB(1024),
+	subscribe TEXT(2048),
 	is_deleted TINYINT(1) DEFAULT '0'
 );
 
 CREATE INDEX title_index ON lots(title);
-CREATE INDEX subscribe_index ON lots(subscribe);
+CREATE INDEX subscribe_index ON lots(subscribe(1024));
 CREATE INDEX bidding_ending_index ON lots(bidding_ending);
+CREATE FULLTEXT INDEX lots_ft_search ON lots( title, subscribe);
 
 	CREATE TABLE bids (
 	id INT AUTO_INCREMENT PRIMARY KEY,
